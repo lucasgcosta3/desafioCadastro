@@ -13,11 +13,10 @@ public class MenuUtil {
         5. Listar pets por algum critério (idade, nome, raça)
         6. Sair""");
         System.out.print("Opção: ");
-        if (sc.hasNextInt()) {
-            return sc.nextInt();
-        } else {
-            sc.next();
-            return 0;
+        try {
+            return Integer.parseInt(sc.nextLine());
+        } catch (NumberFormatException e) {
+           return 0;
         }
     }
 }
