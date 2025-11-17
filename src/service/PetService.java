@@ -4,6 +4,7 @@ import model.Pet;
 import model.PetAddress;
 import model.PetSex;
 import model.PetType;
+import util.ConstantUtil;
 
 import java.util.List;
 import java.util.Scanner;
@@ -47,6 +48,7 @@ public class PetService {
     }
 
     private String validateName(String answer) {
+        if (answer.isBlank()) return ConstantUtil.NAO_INFORMADO;
         if (answer.matches("^[A-Za-z]+ [A-Za-z]{2,}$")) {
             return answer;
         }
@@ -69,7 +71,9 @@ public class PetService {
         if (!street.matches("^[A-Za-z0-9 ]+$")) {
             throw new IllegalArgumentException("Rua inválida");
         }
-        if (!number.matches("^[0-9]+$")) {
+        if (number.isBlank()) {
+            number = ConstantUtil.NAO_INFORMADO;
+        } else if (!number.matches("^[0-9]+$")) {
             throw new IllegalArgumentException("Número inválido");
         }
         if (!city.matches("^[A-Za-z]+( [A-Za-z]+)*$")) {
@@ -90,6 +94,7 @@ public class PetService {
     }
 
     private double validateAge(String answer) {
+        if (answer.isBlank()) return 0; // será salvo no arquivo como NÃO INFORMADO
         String ageFmt = answer.replace(",", ".");
         try {
             double age = Double.parseDouble(ageFmt);
@@ -103,6 +108,7 @@ public class PetService {
     }
 
     private double validateWeight(String answer) {
+        if (answer.isBlank()) return 0; // será salvo no arquivo como NÃO INFORMADO
         String weightFmt = answer.replace(",", ".");
         try {
             double weight = Double.parseDouble(weightFmt);
@@ -116,6 +122,7 @@ public class PetService {
     }
 
     private String validateBreed(String answer) {
+        if (answer.isBlank()) return ConstantUtil.NAO_INFORMADO;
         if (answer.matches("^[A-Za-z]+( [A-Za-z]{2,})?$")) return answer;
         throw new IllegalArgumentException("Raça inválida. Deve conter apenas letras");
     }
