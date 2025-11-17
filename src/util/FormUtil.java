@@ -1,6 +1,8 @@
 package util;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FormUtil {
     public static void createForm() {
@@ -26,14 +28,16 @@ public class FormUtil {
         }
     }
 
-    public static void readForm() {
+    public static List<String> readForm() {
+        List<String> perguntas = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader("formulario.txt"))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-                System.out.println(linha);
+                perguntas.add(linha);
             }
         } catch (Exception e) {
             throw new RuntimeException("Erro ao ler arquivo: " + e.getMessage());
         }
+        return perguntas;
     }
 }
