@@ -1,11 +1,14 @@
 package app;
 
+import controller.PetController;
+
 import java.util.Scanner;
 import static util.MenuUtil.showMenu;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        PetController controller = new PetController();
 
         while (true) {
             int opcao = showMenu(sc);
