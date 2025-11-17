@@ -11,7 +11,7 @@ public class Main {
             int opcao = showMenu(sc);
 
             switch (opcao) {
-                case 1 -> System.out.println("cadastrando");
+                case 1 -> controller.register(sc);
                 case 2 -> System.out.println("alterando");
                 case 3 -> System.out.println("deletando");
                 case 4 -> System.out.println("listando");
