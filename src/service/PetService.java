@@ -49,7 +49,7 @@ public class PetService {
 
     private String validateName(String answer) {
         if (answer.isBlank()) return ConstantUtil.NAO_INFORMADO;
-        if (answer.matches("^[A-Za-z]+ [A-Za-z]{2,}$")) {
+        if (answer.matches("^[A-Za-z]+(?: [A-Za-z]+)+$")) {
             return answer;
         }
         throw new IllegalArgumentException("Nome inválido. O pet deve conter nome e sobrenome, use apenas letras.");
