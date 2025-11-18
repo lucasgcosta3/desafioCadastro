@@ -1,5 +1,7 @@
 package model;
 
+import java.text.DecimalFormat;
+
 public class Pet {
     private String petName;
     private PetType petType;
