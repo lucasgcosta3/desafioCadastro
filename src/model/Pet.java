@@ -76,4 +76,18 @@ public class Pet {
     public void setPetBreed(String petBreed) {
         this.petBreed = petBreed;
     }
+
+    @Override
+    public String toString() {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return String.format("%s - %s - %s - %s - %s anos - %skg - %s",
+                petName,
+                petType.getDescription(),
+                petSex.getDescription(),
+                petAddress,
+                df.format(petAge),
+                df.format(petWeight),
+                petBreed
+        );
+    }
 }
