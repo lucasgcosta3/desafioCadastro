@@ -13,4 +13,13 @@ public enum PetSex {
     public String getDescription() {
         return description;
     }
+
+    public static PetSex fromDescription(String desc) {
+        for (PetSex sex : PetSex.values()) {
+            if (sex.getDescription().equalsIgnoreCase(desc.trim())) {
+                return sex;
+            }
+        }
+        throw new IllegalArgumentException("Tipo inválido: " + desc);
+    }
 }
