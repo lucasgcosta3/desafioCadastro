@@ -1,6 +1,10 @@
 package model;
 
+import util.ConstantUtil;
+
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
 
 public class Pet {
     private String petName;
@@ -81,14 +85,17 @@ public class Pet {
 
     @Override
     public String toString() {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return String.format("%s - %s - %s - %s - %s anos - %skg - %s",
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat df = new DecimalFormat("#.##", symbols);
+        String idadeStr = petAge == 0 ? ConstantUtil.NAO_INFORMADO : df.format(petAge) + " anos";
+        String pesoStr  = petWeight == 0 ? ConstantUtil.NAO_INFORMADO : df.format(petWeight) + "kg";
+        return String.format("%s - %s - %s - %s - %s - %s - %s",
                 petName,
                 petType.getDescription(),
                 petSex.getDescription(),
                 petAddress,
-                df.format(petAge),
-                df.format(petWeight),
+                idadeStr,
+                pesoStr,
                 petBreed
         );
     }
