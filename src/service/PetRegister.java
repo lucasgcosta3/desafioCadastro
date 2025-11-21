@@ -6,15 +6,12 @@ import model.PetSex;
 import model.PetType;
 import util.ConstantUtil;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import static util.FormUtil.readForm;
-import static util.MenuUtil.showSearchMenu;
 
-public class PetService {
+public class PetRegister {
     public Pet registerPet(Scanner sc) {
         Pet pet = new Pet();
         List<String> questions = readForm();
@@ -36,17 +33,6 @@ public class PetService {
             }
         }
         return pet;
-    }
-
-    public void listPets(List<Pet> pets) {
-        if (!pets.isEmpty()) {
-            int i = 1;
-            for (Pet pet : pets) {
-                System.out.println(i++ + ". " + pet);
-            }
-        } else {
-            System.out.println("Nenhum pet cadastrado");
-        }
     }
 
     private void validateAnswer(String question, String answer, Pet pet) {
