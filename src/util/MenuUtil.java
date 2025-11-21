@@ -1,5 +1,7 @@
 package util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuUtil {
@@ -17,6 +19,66 @@ public class MenuUtil {
             return Integer.parseInt(sc.nextLine());
         } catch (NumberFormatException e) {
            return 0;
+        }
+    }
+
+    public static List<String> showSearchMenu(Scanner sc) {
+        List<String> filters = new ArrayList<>();
+
+        System.out.println("Tipo do pet: ");
+        String type = sc.nextLine().trim();
+        filters.add(type);
+
+        showFilterMenu();
+        String filter = readFilter(sc);
+        if (filter != null) {
+            System.out.println("Digite o valor para o filtro 1: ");
+            String val = sc.nextLine().trim();
+            filters.add(filter + "=" + val);
+        }
+
+        System.out.println("Deseja selecionar outro critério (s/n)?");
+        String answer = sc.nextLine();
+        if (answer.equalsIgnoreCase("s")) {
+            showFilterMenu();
+            filter = readFilter(sc);
+            if (filter != null) {
+                System.out.println("Digite o valor para o filtro 2: ");
+                String val = sc.nextLine().trim();
+                filters.add(filter + "=" + val);
+            }
+        }
+        return filters;
+    }
+
+    private static void showFilterMenu() {
+        System.out.println("""
+    -----------------------------------------------------
+    Escolha um critério:
+    1. Nome ou sobrenome
+    2. Sexo
+    3. Idade
+    4. Peso
+    5. Raça
+    6. Endereço""");
+        System.out.print("Opção: ");
+    }
+
+    private static String readFilter(Scanner sc) {
+        try {
+            int option = Integer.parseInt(sc.nextLine());
+            return switch (option) {
+                case 1 -> "name";
+                case 2 -> "sex";
+                case 3 -> "age";
+                case 4 -> "weight";
+                case 5 -> "breed";
+                case 6 -> "address";
+                default -> null;
+            };
+        } catch (NumberFormatException e) {
+            System.err.println("Entrada inválida");
+            return null;
         }
     }
 }
