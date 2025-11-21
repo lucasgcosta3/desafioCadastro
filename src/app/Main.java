@@ -3,6 +3,7 @@ package app;
 import controller.PetController;
 
 import java.util.Scanner;
+
 import static util.MenuUtil.showMenu;
 
 public class Main {
@@ -17,8 +18,8 @@ public class Main {
                 case 1 -> controller.register(sc);
                 case 2 -> System.out.println("alterando");
                 case 3 -> System.out.println("deletando");
-                case 4 -> System.out.println("listando");
-                case 5 -> System.out.println("listando por critério");
+                case 4 -> controller.list();
+                case 5 -> controller.search(sc);
                 case 6 -> {
                     System.out.println("Saindo...");
                     return;
