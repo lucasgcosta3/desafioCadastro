@@ -4,7 +4,9 @@ import model.Pet;
 import model.PetAddress;
 import util.ConstantUtil;
 import util.PetUtil;
+
 import java.io.*;
+import java.nio.file.Files;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileService {
+    File folder = new File("petsCadastrados");
+
     public void savePetFile(Pet pet) {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyyddMM'T'HHmm");
@@ -21,7 +25,6 @@ public class FileService {
                 .replace(" ", "")
                 .toUpperCase() + ".txt";
 
-        File folder = new File("petsCadastrados");
         if (!folder.exists()) {
             folder.mkdir();
         }
@@ -54,14 +57,13 @@ public class FileService {
 
     public List<Pet> readPetFile() {
         List<Pet> pets = new ArrayList<>();
-        File folder = new File("petsCadastrados");
 
         for (File archive : folder.listFiles()) {
-            try(BufferedReader br = new BufferedReader(new FileReader(archive))) {
+            try (BufferedReader br = new BufferedReader(new FileReader(archive))) {
                 List<String> petData = new ArrayList<>();
                 String line;
 
-                while((line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     String value = line.split("-")[1].trim();
                     petData.add(value);
                 }
@@ -69,9 +71,36 @@ public class FileService {
                 Pet pet = PetUtil.buildPet(petData);
                 pets.add(pet);
             } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
+                throw new RuntimeException("Erro ao ler arquivo " + archive.getName() + ":" + e.getMessage());
             }
         }
         return pets;
+    }
+
+    public void updatePetFile(List<Pet> pets) {
+        Pet oldPet = pets.getFirst();
+        Pet updatedPet = pets.get(1);
+        String oldPetName = oldPet.getPetName().replace(" ", "").toUpperCase();
+        String oldPetAddress = oldPet.getPetAddress().getStreet().toUpperCase();
+
+        for (File archive : folder.listFiles()) {
+            String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
+
+            if (archiveName.equals(oldPetName)) {
+                try {
+                    List<String> linhas = Files.readAllLines(archive.toPath());
+                    if (linhas.size() >= 4) {
+                        String linhaUpper = linhas.get(3).toUpperCase();
+                        if (linhaUpper.contains(oldPetAddress)) {
+                            if (archive.delete()) {
+                                savePetFile(updatedPet);
+                            }
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException("Erro ao atualizar: " + e.getMessage());
+                }
+            }
+        }
     }
 }
