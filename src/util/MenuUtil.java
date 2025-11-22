@@ -7,60 +7,76 @@ import java.util.Scanner;
 public class MenuUtil {
     public static int showMenu(Scanner sc) {
         System.out.println("""
-        -----------------------------------------------------
-        1. Cadastrar um novo pet
-        2. Alterar os dados do pet cadastrado
-        3. Deletar um pet cadastrado
-        4. Listar todos os pets cadastrados
-        5. Listar pets por algum critério (idade, nome, raça)
-        6. Sair""");
+                -----------------------------------------------------
+                1. Cadastrar um novo pet
+                2. Alterar os dados do pet cadastrado
+                3. Deletar um pet cadastrado
+                4. Listar todos os pets cadastrados
+                5. Listar pets por algum critério (idade, nome, raça)
+                6. Sair""");
         System.out.print("Opção: ");
         try {
             return Integer.parseInt(sc.nextLine());
         } catch (NumberFormatException e) {
-           return 0;
+            return 0;
         }
     }
 
     public static List<String> showSearchMenu(Scanner sc) {
+        ValidatorUtil validator = new ValidatorUtil();
         List<String> filters = new ArrayList<>();
 
-        System.out.println("Tipo do pet: ");
-        String type = sc.nextLine().trim();
-        filters.add(type);
-
-        showFilterMenu();
-        String filter = readFilter(sc);
-        if (filter != null) {
-            System.out.println("Digite o valor para o filtro 1: ");
-            String val = sc.nextLine().trim();
-            filters.add(filter + "=" + val);
+        while (true) {
+            try {
+                System.out.println("Tipo do pet: ");
+                String type = sc.nextLine().trim();
+                filters.add(validator.validateType(type).getDescription());
+                break;
+            } catch (RuntimeException e) {
+                System.err.println("Erro: " + e.getMessage());
+            }
         }
+
+        String filter = null;
+        while (filter == null) {
+            showFilterMenu();
+            filter = readFilter(sc);
+            if (filter == null) {
+                System.err.println("Opção inválida. Digite um número de 1 a 6.");
+            }
+        }
+        System.out.println("Digite o valor para o filtro 1: ");
+        String val = sc.nextLine().trim();
+        filters.add(filter + "=" + val);
 
         System.out.println("Deseja selecionar outro critério (s/n)?");
         String answer = sc.nextLine();
         if (answer.equalsIgnoreCase("s")) {
-            showFilterMenu();
-            filter = readFilter(sc);
-            if (filter != null) {
-                System.out.println("Digite o valor para o filtro 2: ");
-                String val = sc.nextLine().trim();
-                filters.add(filter + "=" + val);
+            filter = null;
+            while (filter == null) {
+                showFilterMenu();
+                filter = readFilter(sc);
+                if (filter == null) {
+                    System.err.println("Opção inválida. Digite um número de 1 a 6.");
+                }
             }
+            System.out.println("Digite o valor para o filtro 2: ");
+            val = sc.nextLine().trim();
+            filters.add(filter + "=" + val);
         }
         return filters;
     }
 
     private static void showFilterMenu() {
         System.out.println("""
-    -----------------------------------------------------
-    Escolha um critério:
-    1. Nome ou sobrenome
-    2. Sexo
-    3. Idade
-    4. Peso
-    5. Raça
-    6. Endereço""");
+                -----------------------------------------------------
+                Escolha um critério:
+                1. Nome ou sobrenome
+                2. Sexo
+                3. Idade
+                4. Peso
+                5. Raça
+                6. Endereço""");
         System.out.print("Opção: ");
     }
 
@@ -77,7 +93,7 @@ public class MenuUtil {
                 default -> null;
             };
         } catch (NumberFormatException e) {
-            System.err.println("Entrada inválida");
+            System.err.print("Erro: ");
             return null;
         }
     }
