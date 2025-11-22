@@ -15,11 +15,15 @@ import static util.FormUtil.readForm;
 public class PetRegister {
     private final ValidatorUtil validator = new ValidatorUtil();
 
-    public Pet registerPet(Scanner sc) {
+    public Pet registerPet(Scanner sc, boolean isUpdate) {
         Pet pet = new Pet();
         List<String> questions = readForm();
 
         for (String q : questions) {
+            if (isUpdate && (q.contains("sexo") || q.contains("tipo"))) {
+                continue;
+            }
+
             while (true) {
                 System.out.println(q);
                 try {
