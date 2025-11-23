@@ -1,10 +1,7 @@
 package controller;
 
 import model.Pet;
-import service.FileService;
-import service.PetRegister;
-import service.PetSearch;
-import service.PetUpdate;
+import service.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -15,6 +12,7 @@ public class PetController {
     private final PetRegister petRegister = new PetRegister();
     private final PetSearch petSearch = new PetSearch();
     private final PetUpdate petUpdate = new PetUpdate();
+    private final PetDelete petDelete = new PetDelete();
     private final FileService fileService = new FileService();
 
     public void register(Scanner sc) {
@@ -66,6 +64,20 @@ public class PetController {
             fileService.updatePetFile(pets);
 
             System.out.println("Pet alterado com sucesso✅");
+        }
+    }
+
+    public void delete(Scanner sc) {
+        List<Pet> results = search(sc);
+        if (!results.isEmpty()) {
+            System.out.println("--- Deletar Pet ---");
+            System.out.println("Escolha o número do pet que quer deletar: ");
+
+            Pet pet = petDelete.deletePet(results, sc);
+            if (pet != null) {
+                fileService.deletePetFile(pet);
+                System.out.println("Pet deletado com sucesso✅");
+            }
         }
     }
 }
