@@ -106,14 +106,22 @@ public class FileService {
     public void deletePetFile(Pet pet) {
         if (pet == null) return;
         String petName = pet.getPetName().replace(" ", "").toUpperCase();
+        String petAddress = pet.getPetAddress().getNumber().toUpperCase();
 
         for (File archive : folder.listFiles()) {
             String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
+
             if (archiveName.equals(petName)) {
                 try {
-                    Files.delete(archive.toPath());
+                    List<String> linhas = Files.readAllLines(archive.toPath());
+                    if (linhas.size() >= 4) {
+                        String linhaUpper = linhas.get(3).toUpperCase();
+                        if (linhaUpper.contains(petAddress)) {
+                            Files.delete(archive.toPath());
+                        }
+                    }
                 } catch (IOException e) {
-                    System.err.println("Erro ao excluir arquivo: " + e.getMessage());
+                    System.err.println("Erro ao deletar: " + e.getMessage());
                 }
             }
         }
