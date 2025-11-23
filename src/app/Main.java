@@ -17,7 +17,7 @@ public class Main {
             switch (opcao) {
                 case 1 -> controller.register(sc);
                 case 2 -> controller.update(sc);
-                case 3 -> System.out.println("deletando");
+                case 3 -> controller.delete(sc);
                 case 4 -> controller.list();
                 case 5 -> controller.search(sc);
                 case 6 -> {
