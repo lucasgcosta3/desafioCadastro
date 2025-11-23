@@ -81,7 +81,7 @@ public class FileService {
         Pet oldPet = pets.getFirst();
         Pet updatedPet = pets.get(1);
         String oldPetName = oldPet.getPetName().replace(" ", "").toUpperCase();
-        String oldPetAddress = oldPet.getPetAddress().getStreet().toUpperCase();
+        String oldPetAddress = oldPet.getPetAddress().getNumber().toUpperCase();
 
         for (File archive : folder.listFiles()) {
             String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
