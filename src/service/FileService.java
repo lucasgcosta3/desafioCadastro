@@ -92,13 +92,28 @@ public class FileService {
                     if (linhas.size() >= 4) {
                         String linhaUpper = linhas.get(3).toUpperCase();
                         if (linhaUpper.contains(oldPetAddress)) {
-                            if (archive.delete()) {
-                                savePetFile(updatedPet);
-                            }
+                            Files.delete(archive.toPath());
+                            savePetFile(updatedPet);
                         }
                     }
                 } catch (IOException e) {
-                    throw new RuntimeException("Erro ao atualizar: " + e.getMessage());
+                    System.err.println("Erro ao atualizar: " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void deletePetFile(Pet pet) {
+        if (pet == null) return;
+        String petName = pet.getPetName().replace(" ", "").toUpperCase();
+
+        for (File archive : folder.listFiles()) {
+            String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
+            if (archiveName.equals(petName)) {
+                try {
+                    Files.delete(archive.toPath());
+                } catch (IOException e) {
+                    System.err.println("Erro ao excluir arquivo: " + e.getMessage());
                 }
             }
         }
