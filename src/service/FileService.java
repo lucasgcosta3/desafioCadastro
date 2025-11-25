@@ -81,7 +81,8 @@ public class FileService {
         Pet oldPet = pets.getFirst();
         Pet updatedPet = pets.get(1);
         String oldPetName = oldPet.getPetName().replace(" ", "").toUpperCase();
-        String oldPetAddress = oldPet.getPetAddress().getNumber().toUpperCase();
+        String oldPetAddress = (oldPet.getPetAddress().getStreet() + ", " + oldPet.getPetAddress().getNumber() +
+                ", " + oldPet.getPetAddress().getCity()).trim().toUpperCase();
 
         for (File archive : folder.listFiles()) {
             String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
@@ -90,8 +91,8 @@ public class FileService {
                 try {
                     List<String> linhas = Files.readAllLines(archive.toPath());
                     if (linhas.size() >= 4) {
-                        String linhaUpper = linhas.get(3).toUpperCase();
-                        if (linhaUpper.contains(oldPetAddress)) {
+                        String linhaAddress = linhas.get(3).substring(4).trim().toUpperCase();
+                        if (linhaAddress.equals(oldPetAddress)) {
                             Files.delete(archive.toPath());
                             savePetFile(updatedPet);
                         }
@@ -106,7 +107,8 @@ public class FileService {
     public void deletePetFile(Pet pet) {
         if (pet == null) return;
         String petName = pet.getPetName().replace(" ", "").toUpperCase();
-        String petAddress = pet.getPetAddress().getNumber().toUpperCase();
+        String petAddress = (pet.getPetAddress().getStreet() + ", " + pet.getPetAddress().getNumber() +
+                ", " + pet.getPetAddress().getCity()).trim().toUpperCase();
 
         for (File archive : folder.listFiles()) {
             String archiveName = archive.getName().replace("-", ".").split("\\.")[1];
@@ -115,8 +117,8 @@ public class FileService {
                 try {
                     List<String> linhas = Files.readAllLines(archive.toPath());
                     if (linhas.size() >= 4) {
-                        String linhaUpper = linhas.get(3).toUpperCase();
-                        if (linhaUpper.contains(petAddress)) {
+                        String linhaAddress = linhas.get(3).substring(4).trim().toUpperCase();
+                        if (linhaAddress.equals(petAddress)) {
                             Files.delete(archive.toPath());
                         }
                     }
